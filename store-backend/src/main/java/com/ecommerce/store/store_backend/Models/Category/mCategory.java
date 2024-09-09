@@ -8,14 +8,31 @@ public class mCategory {
     @Data
     @NoArgsConstructor
     public static class Category{
-        private int id;
-        private String name;
+        private int categoryId;
+        private String categoryName;
         private String description;
+        private Integer parentCategoryId;
 
-        public Category(int id, String name, String description) {
-            this.id = id;
-            this.name = name;
+        public Category(int categoryId, String categoryName, String description, Integer parentCategoryId) {
+            this.categoryId = categoryId;
+            this.categoryName = categoryName;
             this.description = description;
+            this.parentCategoryId = parentCategoryId;
+        }
+    }
+    @Data
+    @NoArgsConstructor
+    public static  class SubCategory{
+        private int subcategoryId;
+        private String subcategoryName;
+        private String description;
+        private int categoryId;
+
+        public SubCategory(int subcategoryId, String subcategoryName, String description, int categoryId) {
+            this.subcategoryId = subcategoryId;
+            this.subcategoryName = subcategoryName;
+            this.description = description;
+            this.categoryId = categoryId;
         }
     }
 

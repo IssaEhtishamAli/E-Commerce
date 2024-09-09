@@ -11,4 +11,5 @@ public interface ICategoryRepositriy{
     mGeneric.mApiResponse save(mCategory.Category category);
     mGeneric.mApiResponse update(mCategory.Category category);
     mGeneric.mApiResponse delete(int id);
+    mGeneric.mApiResponse<List<mCategory.SubCategory>> getSubcategoriesByCategoryId(int categoryId);
 }

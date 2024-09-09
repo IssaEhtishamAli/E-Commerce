@@ -12,15 +12,15 @@ public class mProduct {
         private String description;
         private double price;
         private int stockQuantity;
-        private int categoryId;
+        private int subcategory_id;
 
-        public Product(int productId, String name, String description, double price, int stockQuantity, int categoryId) {
+        public Product(int productId, String name, String description, double price, int stockQuantity, int subcategory_id) {
             this.productId = productId;
             this.name = name;
             this.description = description;
             this.price = price;
             this.stockQuantity = stockQuantity;
-            this.categoryId = categoryId;
+            this.subcategory_id = subcategory_id;
         }
     }
 }
