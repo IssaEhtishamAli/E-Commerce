@@ -7,6 +7,7 @@ import com.ecommerce.store.store_backend.Models.Generic.mGeneric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -19,8 +20,8 @@ public class CategoryRepositriy implements ICategoryRepositriy{
 
     private final String SELECT_ALL_CATEGORIES = "SELECT * FROM categories";
     private final String SELECT_CATEGORY_BY_ID = "SELECT * FROM categories WHERE category_id = ?";
-    private final String INSERT_CATEGORY ="INSERT INTO categories (category_name, description, parent_category_id) VALUES (?, ?, ?)";
-    private final String UPDATE_CATEGORY ="UPDATE categories SET category_name = ?, description = ?, parent_category_id = ? WHERE category_id = ?";
+    private final String INSERT_CATEGORY ="INSERT INTO categories (category_name, description) VALUES (?, ?)";
+    private final String UPDATE_CATEGORY = "UPDATE categories SET category_name = ?, description = ? WHERE category_id = ?";
     private final String DELETE_CATEGORY ="DELETE FROM categories WHERE category_id = ?";
     private final String SELECT_SUBCATEGORY_BY_ID ="SELECT * FROM subcategories WHERE category_id = ?";
     @Override
@@ -57,13 +58,14 @@ public class CategoryRepositriy implements ICategoryRepositriy{
     @Override
     public mGeneric.mApiResponse save(mCategory.Category category) {
         try {
+            GeneratedKeyHolder gn = new GeneratedKeyHolder();
             int rowsAffected =  jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(INSERT_CATEGORY);
                 ps.setString(1, category.getCategoryName());
                 ps.setString(2, category.getDescription());
-                ps.setObject(3, category.getParentCategoryId()); // Null-safe handling
                 return ps;
-            });
+            },gn);
+            System.out.print("<-----------PreparedStatement---------->"+gn.getKeyList());
             if (rowsAffected > 0) {
                 return new mGeneric.mApiResponse(1, "Category saved successfully", category);
             } else {
@@ -77,25 +79,27 @@ public class CategoryRepositriy implements ICategoryRepositriy{
     @Override
     public mGeneric.mApiResponse update(mCategory.Category category) {
         try {
-            int rowsAffected =jdbcTemplate.update(connection -> {
+            int rowsAffected = jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(UPDATE_CATEGORY);
-                ps.setString(1, category.getCategoryName());
-                ps.setString(2, category.getDescription());
-                ps.setObject(3, category.getParentCategoryId());
-                ps.setInt(4, category.getCategoryId());
+                ps.setString(1, category.getCategoryName()); // Set category name first
+                ps.setString(2, category.getDescription());  // Set description second
+                ps.setInt(3, category.getCategoryId());      // Set category id for the WHERE clause
                 return ps;
             });
-            return rowsAffected > 0 ? new mGeneric.mApiResponse(1,"Category updated successfully",category):  new mGeneric.mApiResponse(0,"Falied to update record");
+
+            return rowsAffected > 0
+                    ? new mGeneric.mApiResponse(1, "Category updated successfully", category)
+                    : new mGeneric.mApiResponse(0, "Failed to update record");
 //            if(rowsAffected >0){
 //                return new mGeneric.mApiResponse(0,"Falied to update record");
 //            }
 //            else{
 //                return new mGeneric.mApiResponse(1,"Category updated successfully",category);
-//            }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return new mGeneric.mApiResponse(0, ex.getMessage());
         }
     }
+
 
     @Override
     public mGeneric.mApiResponse delete(int id) {

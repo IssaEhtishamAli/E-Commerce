@@ -11,13 +11,11 @@ public class mCategory {
         private int categoryId;
         private String categoryName;
         private String description;
-        private Integer parentCategoryId;
 
-        public Category(int categoryId, String categoryName, String description, Integer parentCategoryId) {
+        public Category(int categoryId, String categoryName, String description) {
             this.categoryId = categoryId;
             this.categoryName = categoryName;
             this.description = description;
-            this.parentCategoryId = parentCategoryId;
         }
     }
     @Data

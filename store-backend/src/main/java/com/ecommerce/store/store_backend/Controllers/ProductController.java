@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/product/")
+//@RequestMapping({"/local-category", "/prod-category"})
 @Tag(name = "Products", description = "E-Commerce Store")
 public class ProductController {
 
@@ -35,7 +36,7 @@ public class ProductController {
     })
     @PostMapping
     public ResponseEntity<String> createProduct(
-            @RequestBody @Schema(description = "Details of the product to be created", required = true) mProduct.Product product) {
+            @RequestBody mProduct.Product product) {
         int result = productService.save(product).getRespCode();
         return result > 0 ? ResponseEntity.ok("Product created successfully") : ResponseEntity.badRequest().body("Product creation failed");
     }

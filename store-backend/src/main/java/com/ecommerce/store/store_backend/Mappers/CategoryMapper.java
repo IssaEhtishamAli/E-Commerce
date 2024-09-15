@@ -13,7 +13,6 @@ public class CategoryMapper implements RowMapper<mCategory.Category> {
         category.setCategoryId(rs.getInt("category_id"));
         category.setCategoryName(rs.getString("category_name"));
         category.setDescription(rs.getString("description"));
-        category.setParentCategoryId(rs.getInt("parent_category_id"));
         return  category;
     }
 
