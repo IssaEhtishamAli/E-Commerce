@@ -72,10 +72,14 @@ public class UserRepositriyImpl implements IUserRepositriy{
 
     @Override
     public mJwtData  getUserDetailsForJwtToken(String email) {
-
-        String query="select user_id,username,email,password,profile_picture_url,token_expiry,last_login from users where Lower(email)=Lower('"+email+"') and is_active=true";
+    try {
+        String query="select user_id,username,email,password,profile_picture_url,last_login,token_expiry from users where Lower(email)=Lower('"+email+"') and is_active=true";
         mJwtData jwtData= jdbctemplate.queryForObject(query, new JwtRowMapper());
         return jwtData;
+    }
+    catch (Exception ex){
+        return null;
+    }
     }
 
     @Override

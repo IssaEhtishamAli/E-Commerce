@@ -66,7 +66,7 @@ public class AuthController {
             String picture=UserInfo.getProfilePicture();
             if(UserInfo !=null){
                 String Token=this.jwtUtil.generateToken(UserInfo);
-                mJwtResponse response= new mJwtResponse(Token,UserInfo.getUserId(),UserInfo.getUserName(),UserInfo.getProfilePicture());
+                mJwtResponse response= new mJwtResponse(Token,UserInfo.getUserId(),UserInfo.getUserName(),UserInfo.getProfilePicture(), UserInfo.getLastLogin(),UserInfo.getTokenExpiry());
                 return ResponseEntity.ok(new mGeneric.mApiResponse(1,"User Login Successfully",response));
             }
             else {

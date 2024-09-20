@@ -12,16 +12,16 @@ public class mJwtResponse {
     private String JwtToken;
     private int UserId;
     private String UserName;
-//    private LocalDateTime TokenExpiry;
     private String ProfilePicture;
-//    private LocalDateTime LastLogin;
+    private LocalDateTime LastLogin;
+    private LocalDateTime TokenExpiry;
 
-    public mJwtResponse(String jwtToken, int userId, String userName, String profilePicture) {
+    public mJwtResponse(String jwtToken, int userId, String userName, String profilePicture,LocalDateTime lastLogin,LocalDateTime tokenExpiry) {
         JwtToken = jwtToken;
         UserId = userId;
         UserName = userName;
-//        TokenExpiry = tokenExpiry;
         ProfilePicture = profilePicture;
-//        LastLogin = lastLogin;
+        LastLogin= lastLogin;
+        TokenExpiry = tokenExpiry;
     }
 }
