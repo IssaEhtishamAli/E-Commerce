@@ -95,11 +95,13 @@ public class mUsers {
     }
     @Data
     public static class GetUserForAuthentication {
+        private int UserId;
         private String Email;
         private String Password;
         private String UserName;
 
-        public GetUserForAuthentication(String email, String password, String userName) {
+        public GetUserForAuthentication(int userId,String email, String password, String userName) {
+            UserId= userId;
             Email = email;
             Password = password;
             UserName = userName;

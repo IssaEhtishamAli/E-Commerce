@@ -19,9 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.ErrorResponseException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/auth/")
@@ -39,9 +37,13 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "User creation failed", content = @Content)
     })
     @RequestMapping(value = "signUp",method = RequestMethod.POST)
-    public ResponseEntity<?> signUp(mSignUp.SignUp signUp){
+    public ResponseEntity<?> signUp(mSignUp.SignUp signUp, Integer roleId){
         try {
-            mGeneric.mApiResponse response = userService.saveUser(signUp);
+            // Assign default role if not provided (for example, 'USER' role)
+            if (roleId == null) {
+                roleId = 2; // Default to 'USER'
+            }
+            mGeneric.mApiResponse response = userService.saveUser(signUp,roleId);
             if (response.getRespCode() == 1) {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
@@ -54,8 +56,8 @@ public class AuthController {
 
     @Operation(summary = "SignIn User", description ="Signin user to the e-commerce store.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User Signin successfully", content = @Content),
-            @ApiResponse(responseCode = "400", description = "User Signin failed", content = @Content)
+            @ApiResponse(responseCode = "200", description = "User signin successfully", content = @Content),
+            @ApiResponse(responseCode = "400", description = "User signin failed", content = @Content)
     })
     @RequestMapping(value = "signIn",method = RequestMethod.POST)
     public ResponseEntity<?> signIn(mLogin signinBody){
@@ -79,5 +81,16 @@ public class AuthController {
             ErrorResponseException errorResponse = new ErrorResponseException(HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
+    }
+    @Operation(summary = "Assign Role", description ="Assign roles to the user in e-commerce store.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Roles assign successfully", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Roles assign failed", content = @Content)
+    })
+    @PostMapping("/assign-role")
+    public ResponseEntity<?> assignRole(@RequestParam Integer userId, @RequestParam Integer roleId) {
+        // Manually assign role to an existing user (admin action)
+        mGeneric.mApiResponse response = userService.assignRole(userId, roleId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
