@@ -5,6 +5,7 @@ import com.ecommerce.store.store_backend.Models.Auth.mJwtResponse;
 import com.ecommerce.store.store_backend.Models.Auth.mLogin;
 import com.ecommerce.store.store_backend.Models.Auth.mSignUp;
 import com.ecommerce.store.store_backend.Models.Generic.mGeneric;
+import com.ecommerce.store.store_backend.Services.Audit.IAuditService;
 import com.ecommerce.store.store_backend.Services.Auth.IUserService;
 import com.ecommerce.store.store_backend.Util.Jwt.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+
 @RestController
 @RequestMapping(value = "/auth/")
 public class AuthController {
@@ -30,6 +33,8 @@ public class AuthController {
     private JwtTokenUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private IAuditService auditService;
 
     @Operation(summary = "Create a new User", description = "Adds a new user to the e-commerce store.")
     @ApiResponses(value = {
@@ -69,6 +74,7 @@ public class AuthController {
             if(UserInfo !=null){
                 String Token=this.jwtUtil.generateToken(UserInfo);
                 mJwtResponse response= new mJwtResponse(Token,UserInfo.getUserId(),UserInfo.getUserName(),UserInfo.getProfilePicture(), UserInfo.getLastLogin(),UserInfo.getTokenExpiry());
+                auditService.logAction(response.getUserId(), "LOGIN", new Timestamp(System.currentTimeMillis()));
                 return ResponseEntity.ok(new mGeneric.mApiResponse(1,"User Login Successfully",response));
             }
             else {

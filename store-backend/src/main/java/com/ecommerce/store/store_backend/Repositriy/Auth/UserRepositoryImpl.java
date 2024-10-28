@@ -8,6 +8,7 @@ import com.ecommerce.store.store_backend.Models.Auth.mLogin;
 import com.ecommerce.store.store_backend.Models.Auth.mSignUp;
 import com.ecommerce.store.store_backend.Models.Generic.mGeneric;
 import com.ecommerce.store.store_backend.Models.Users.mUsers;
+import com.ecommerce.store.store_backend.Services.Audit.IAuditService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 import org.slf4j.Logger;
 @Repository
@@ -29,6 +31,8 @@ public class UserRepositoryImpl implements IUserRepositriy {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IAuditService auditService;
     private final String INSERT_USER_ROLE = "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)";
     private final String INSERT_USER = "INSERT INTO users (username, email, password, first_name, last_name, phone_number, profile_picture_url, address, is_active, dob, gender) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING user_id";
@@ -65,6 +69,7 @@ public class UserRepositoryImpl implements IUserRepositriy {
 
                 if (roleAssigned > 0) {
                     logger.info("User created successfully: userId={}, roleId={}", userId, roleId);
+                    auditService.logAction(userId, "SignUp", new Timestamp(System.currentTimeMillis()));
                     return new mGeneric.mApiResponse<>(1, "User Created and Role Assigned Successfully", HttpStatus.OK);
                 } else {
                     logger.warn("Failed to assign role for userId={}", userId);

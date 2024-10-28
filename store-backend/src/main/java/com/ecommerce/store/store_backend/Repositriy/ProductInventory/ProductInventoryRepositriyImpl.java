@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public class ProductInventoryImpl implements IProductInventory{
+public class ProductInventoryRepositriyImpl implements IProductInventoryRepositriy {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     // SQL Queries
@@ -64,7 +64,7 @@ public class ProductInventoryImpl implements IProductInventory{
     @Override
     public mGeneric.mApiResponse<mProduct.ProductInventory> updateInventory(mProduct.ProductInventory inventory) {
         try {
-            jdbcTemplate.update(UPDATE_INVENTORY,
+            int rowsAffected = jdbcTemplate.update(UPDATE_INVENTORY,
                     inventory.getProductId(),
                     inventory.getUserId(),
                     inventory.getChangeAmount(),
@@ -73,9 +73,18 @@ public class ProductInventoryImpl implements IProductInventory{
                     inventory.getRemainingStock(),
                     inventory.getInventoryId()
             );
-            return new mGeneric.mApiResponse<>(1, "Inventory updated!", inventory);
+
+            // Check if any rows were affected
+            if (rowsAffected > 0) {
+                System.out.println("Rows affected in inventory update: " + rowsAffected);
+                return new mGeneric.mApiResponse<>(1, "Inventory updated!", inventory);
+            } else {
+                // No rows were affected, throw a custom exception
+                throw new RuntimeException("No inventory records were updated. Please check the inventory_id and product_id.");
+            }
         } catch (Exception ex) {
-            return new mGeneric.mApiResponse<>(0, ex.getMessage());
+            // Catch any exception and return the error message
+            return new mGeneric.mApiResponse<>(0, "Error updating inventory: " + ex.getMessage());
         }
     }
 
