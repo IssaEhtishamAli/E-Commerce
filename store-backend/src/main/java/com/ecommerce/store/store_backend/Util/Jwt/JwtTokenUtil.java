@@ -48,24 +48,16 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(mJwtData userDetails) {
-        userDetails.setProfilePicture(""); // Clear profile picture in token
-
-        // Convert milliseconds to seconds (JWT_TOKEN_VALIDITY is in milliseconds)
         long tokenValidityInSeconds = JWT_TOKEN_VALIDITY / 1000;
         LocalDateTime expiryTime = LocalDateTime.now().plusSeconds(tokenValidityInSeconds);
-        System.out.println("Token Expiry: " + expiryTime);
-//        userDetails.setTokenExpiry(expiryTime); // Ensure tokenExpiry is LocalDateTime
 
-//        String sql_query = "update users set last_login = ?, token_expiry = ? where user_id = ?";
-//        jdbcTemplate.update(sql_query,
-//                userDetails.getLastLogin(),
-//                userDetails.getTokenExpiry(),
-//                userDetails.getUserId());
-
+        // Set token expiry time in the user object (or handle it in your controller)
         Map<String, Object> claims = new HashMap<>();
         claims.put("UserInfo", userDetails);
+
         return createToken(claims, userDetails.getEmail());
     }
+
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()

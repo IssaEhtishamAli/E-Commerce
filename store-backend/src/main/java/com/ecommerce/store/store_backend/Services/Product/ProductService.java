@@ -31,10 +31,13 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public mGeneric.mApiResponse<mProduct.Product> findById(int productId) {
-        return productRepositriy.findById(productId);
+    public mGeneric.mApiResponse<List<mProduct.Product>> findById(int subcategoryId, int page, int pageSize) {
+        return productRepositriy.findById(subcategoryId,page,pageSize);
     }
-
+    @Override
+    public mGeneric.mApiResponse<mProduct.Product> findByProductId(int productId){
+        return productRepositriy.findByProductId(productId);
+    }
     @Override
     public mGeneric.mApiResponse<List<mProduct.Product>> findAll() {
         return productRepositriy.findAll();

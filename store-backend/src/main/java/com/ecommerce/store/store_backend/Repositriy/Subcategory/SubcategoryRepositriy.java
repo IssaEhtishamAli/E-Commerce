@@ -18,7 +18,7 @@ public class SubcategoryRepositriy implements ISubCategoryRepository{
     private final String INSERT_SUBCATEGORY = "INSERT INTO subcategories (subcategory_name, description, category_id) VALUES (?, ?, ?)";
     private final String UPDATE_SUBCATEGORY = "UPDATE subcategories SET subcategory_name = ?, description = ?, category_id = ? WHERE subcategory_id = ?";
     private final String DELETE_SUBCATEGORY = "DELETE FROM subcategories WHERE subcategory_id = ?";
-    private final String FIND_SUBCATEGORY_BY_ID = "SELECT * FROM subcategories WHERE subcategory_id = ?";
+    private final String FIND_SUBCATEGORY_BY_ID = "SELECT * FROM subcategories WHERE category_id = ?";
     private final String FIND_ALL_SUBCATEGORIES = "SELECT * FROM subcategories";
 
     @Override
@@ -79,7 +79,7 @@ public class SubcategoryRepositriy implements ISubCategoryRepository{
     @Override
     public mGeneric.mApiResponse findById(int id) {
         try {
-            mCategory.SubCategory subCategory = jdbcTemplate.queryForObject(FIND_SUBCATEGORY_BY_ID, new Object[]{id}, new SubCategoryRowMapper());
+            List<mCategory.SubCategory> subCategory = jdbcTemplate.query(FIND_SUBCATEGORY_BY_ID, new Object[]{id}, new SubCategoryRowMapper());
             return new mGeneric.mApiResponse(1, "SubCategory found", subCategory);
         } catch (Exception ex) {
             return new mGeneric.mApiResponse(0, "SubCategory not found");

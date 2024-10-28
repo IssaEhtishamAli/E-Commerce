@@ -14,7 +14,7 @@ public class mJwtData {
     private String Password;
     private String Email;
     private int UserId;
-//    private LocalDateTime TokenExpiry;
+    private LocalDateTime TokenExpiry;
     private String ProfilePicture;
-//    private LocalDateTime LastLogin;
+    private LocalDateTime LastLogin;
 }

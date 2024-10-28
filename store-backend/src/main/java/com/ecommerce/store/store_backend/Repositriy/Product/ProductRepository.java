@@ -18,7 +18,8 @@ public class ProductRepository implements  IProductRepositriy{
 
     private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
     private final String SELECT_ALL_PRODUCTS = "SELECT * FROM products";
-    private final String SELECT_PRODUCT_BY_ID = "SELECT * FROM products WHERE product_id = ?";
+    private final String SELECT_PRODUCT_BY_PRODUCT_ID = "SELECT * FROM products WHERE product_id = ?";
+    private final String SELECT_PRODUCT_BY_SUBCATEGORY_ID = "SELECT * FROM products WHERE subcategory_id = ? LIMIT ? OFFSET ?";
     private final String INSERT_PRODUCT = "INSERT INTO products (name, description, price, stock_quantity, category_id) VALUES (?, ?, ?, ?, ?)";
     private final String UPDATE_PRODUCT = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ? WHERE product_id = ?";
     private final String DELETE_PRODUCT = "DELETE FROM products WHERE product_id = ?";
@@ -68,19 +69,38 @@ public class ProductRepository implements  IProductRepositriy{
     }
 
     @Override
-    public mGeneric.mApiResponse<mProduct.Product> findById(int productId) {
+    public  mGeneric.mApiResponse<mProduct.Product> findByProductId(int productId){
         try {
-            int rowsAffected = jdbcTemplate.update(SELECT_PRODUCT_BY_ID,productId);
-            if (rowsAffected >0){
-                return new mGeneric.mApiResponse(1,"Fetched record",productId);
-            }
-            else{
-                return  new mGeneric.mApiResponse<>(0,"Failed to fetched record");
+            mProduct.Product response = jdbcTemplate.queryForObject(SELECT_PRODUCT_BY_PRODUCT_ID,new Object[]{productId}, new ProductRowMapper());
+            if (response != null)  {
+                return new mGeneric.mApiResponse<>(1, "Fetched records", response);
+            } else {
+                return new mGeneric.mApiResponse<>(0, "No records found");
             }
         }catch (Exception ex){
-            return new mGeneric.mApiResponse<>(0,ex.getMessage());
+            return new mGeneric.mApiResponse<>(0, ex.getMessage());
         }
     }
+    @Override
+    public mGeneric.mApiResponse<List<mProduct.Product>> findById(int subcategoryId, int page, int pageSize) {
+        try {
+            int offset = (page - 1) * pageSize; // Calculate the offset for pagination
+            List<mProduct.Product> response = jdbcTemplate.query(
+                    SELECT_PRODUCT_BY_SUBCATEGORY_ID,
+                    new Object[]{subcategoryId, pageSize, offset}, // Pass subcategoryId, limit, and offset
+                    new ProductRowMapper()
+            );
+
+            if (response != null && !response.isEmpty()) {
+                return new mGeneric.mApiResponse<>(1, "Fetched records", response);
+            } else {
+                return new mGeneric.mApiResponse<>(0, "No records found");
+            }
+        } catch (Exception ex) {
+            return new mGeneric.mApiResponse<>(0, ex.getMessage());
+        }
+    }
+
 
     @Override
     public mGeneric.mApiResponse<List<mProduct.Product>> findAll() {

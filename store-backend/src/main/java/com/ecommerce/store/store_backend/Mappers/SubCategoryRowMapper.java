@@ -15,6 +15,5 @@ public class SubCategoryRowMapper  implements RowMapper<mCategory.SubCategory> {
                 rs.getString("subcategory_name"),
                 rs.getString("description"),
                 rs.getInt("category_id"));
-
     }
 }

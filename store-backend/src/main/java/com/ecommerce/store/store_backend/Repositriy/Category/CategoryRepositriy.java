@@ -1,7 +1,7 @@
 package com.ecommerce.store.store_backend.Repositriy.Category;
 
 import com.ecommerce.store.store_backend.Mappers.CategoryMapper;
-import com.ecommerce.store.store_backend.Mappers.SubcategoryRowMapper;
+import com.ecommerce.store.store_backend.Mappers.SubCategoryRowMapper;
 import com.ecommerce.store.store_backend.Models.Category.mCategory;
 import com.ecommerce.store.store_backend.Models.Generic.mGeneric;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,11 @@ public class CategoryRepositriy implements ICategoryRepositriy{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String SELECT_ALL_CATEGORIES = "SELECT * FROM categories";
+    private final String SELECT_ALL_CATEGORIES = "SELECT c.category_id, c.category_name, c.description, " +
+            "sc.subcategory_id, sc.subcategory_name, sc.description as subcategory_description " +
+            "FROM categories c " +
+            "LEFT JOIN subcategories sc ON c.category_id = sc.category_id " +
+            "WHERE c.is_active = true";
     private final String SELECT_CATEGORY_BY_ID = "SELECT * FROM categories WHERE category_id = ?";
     private final String INSERT_CATEGORY ="INSERT INTO categories (category_name, description) VALUES (?, ?)";
     private final String UPDATE_CATEGORY = "UPDATE categories SET category_name = ?, description = ? WHERE category_id = ?";
@@ -117,7 +121,7 @@ public class CategoryRepositriy implements ICategoryRepositriy{
     }
     public mGeneric.mApiResponse<List<mCategory.SubCategory>> getSubcategoriesByCategoryId(int categoryId) {
         try {
-            List<mCategory.SubCategory> response = jdbcTemplate.query(SELECT_SUBCATEGORY_BY_ID, new SubcategoryRowMapper(), categoryId);
+            List<mCategory.SubCategory> response = jdbcTemplate.query(SELECT_SUBCATEGORY_BY_ID, new SubCategoryRowMapper(), categoryId);
             if(response==null){
                 return new mGeneric.mApiResponse(0, "Not FOund!",HttpStatus.NOT_FOUND);
             }else{

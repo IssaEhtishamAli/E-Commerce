@@ -16,6 +16,7 @@ public class ProductRowMapper implements RowMapper<mProduct.Product> {
         product.setPrice(rs.getDouble("price"));
         product.setStockQuantity(rs.getInt("stock_quantity"));
         product.setSubcategory_id(rs.getInt("subcategory_id"));
+        product.setImage_url(rs.getString("image_url"));
         return product;
     }
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.store.store_backend.Controllers;
 
+import com.ecommerce.store.store_backend.Models.Generic.mGeneric;
 import com.ecommerce.store.store_backend.Models.Products.mProduct;
 import com.ecommerce.store.store_backend.Services.Product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -81,24 +83,44 @@ public class ProductController {
     }
 
     /**
-     * Get product by ID.
+     * Get products by subcategory ID with pagination.
      *
-     * @param id The ID of the product.
-     * @return Product details or 404 if not found.
+     * @param subcategoryId The ID of the subcategory.
+     * @param page The page number for pagination (default is 1).
+     * @param pageSize The number of products per page (default is 10).
+     * @return A list of products or 404 if not found.
      */
-    @Operation(summary = "Get product by ID", description = "Fetches the details of a product by its ID.")
+    @Operation(summary = "Get products by subcategory ID", description = "Fetches a list of products by subcategory ID with pagination.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product found",
+            @ApiResponse(responseCode = "200", description = "Products found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = mProduct.Product.class))),
-            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Products not found", content = @Content)
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<mProduct.Product> getProductById(
-            @Parameter(description = "ID of the product to retrieve", required = true) @PathVariable int id) {
-        mProduct.Product product = productService.findById(id).getRespData();
-        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
+    @GetMapping("/subcategory/{subcategoryId}")
+    public ResponseEntity<List<mProduct.Product>> getProductsBySubcategoryId(
+            @Parameter(description = "ID of the subcategory to retrieve products from", required = true) @PathVariable int subcategoryId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        List<mProduct.Product> products = productService.findById(subcategoryId, page, pageSize).getRespData();
+        return products != null && !products.isEmpty() ? ResponseEntity.ok(products) : ResponseEntity.notFound().build();
     }
+    // Fetch a product by productId
+    @Operation(summary = "Get product by product ID", description = "Fetches a product by product ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved product"),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/{productId}")
+    public ResponseEntity<mGeneric.mApiResponse<mProduct.Product>> getProductById(@PathVariable("productId") int productId) {
+        mGeneric.mApiResponse<mProduct.Product> response = productService.findByProductId(productId);
 
+        if (response.getRespCode() == 1) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
     /**
      * Get all products.
      *
