@@ -9,6 +9,7 @@ public class mSignUp {
     @Data
     @NoArgsConstructor
     public static class SignUp{
+        private  int UserId;
         private String UserName;
         private String FirstName;
         private String LastName;
@@ -21,7 +22,8 @@ public class mSignUp {
         private String Gender;
         private boolean IsActive;
 
-        public SignUp(String userName, String firstName, String lastName, String email,LocalDate dob,String gender, String phoneNumber, String password, String profilePicture, String address, boolean isActive) {
+        public SignUp(int userId,String userName, String firstName, String lastName, String email,LocalDate dob,String gender, String phoneNumber, String password, String profilePicture, String address, boolean isActive) {
+            UserId = userId;
             UserName = userName;
             FirstName = firstName;
             LastName = lastName;

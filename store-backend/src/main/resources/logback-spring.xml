@@ -1,0 +1,29 @@
+<configuration>
+    <!-- Define log file path -->
+    <property name="LOG_FILE_PATH" value="${logs.path:-logs}/application_logs"/>
+
+    <!-- Rolling file appender to write logs to a file with a date appended -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Specify the current log file -->
+        <file>${LOG_FILE_PATH}/endpoint.log</file>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <!-- Time-based rolling policy to append the current date to the log file -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Log file pattern with date appended -->
+            <fileNamePattern>${LOG_FILE_PATH}/endpoint_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Keep 30 days of logs -->
+            <maxHistory>30</maxHistory>
+            <!-- Optional: compress old log files -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

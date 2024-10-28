@@ -15,17 +15,20 @@ public class JwtRowMapper implements RowMapper<mJwtData> {
 
         mJwtData jwtData= new mJwtData();
         // Map other fields like username, email, etc.
+        jwtData.setUserId(rs.getInt("user_id"));
         jwtData.setUserName(rs.getString("username"));
         jwtData.setEmail(rs.getString("email"));
-        // ... other fields
-
-        // Map the tokenExpiry (TIMESTAMP without timezone)
-//        Timestamp timestamp = rs.getTimestamp("token_expiry");
-//        if (timestamp != null) {
-//            jwtData.setLastLogin(timestamp.toLocalDateTime()); // Setting the LocalDateTime
-//        } else {
-//            jwtData.setLastLogin(null); // Handle null case appropriately
-//        }
+        jwtData.setPassword(rs.getString("password"));
+        jwtData.setProfilePicture(rs.getString("profile_picture_url"));
+        Timestamp timestamp = rs.getTimestamp("token_expiry");
+        Timestamp timestamps = rs.getTimestamp("last_login");
+        if (timestamp != null && timestamps !=null ) {
+            jwtData.setLastLogin(timestamps.toLocalDateTime());
+            jwtData.setTokenExpiry(timestamp.toLocalDateTime());
+        } else {
+            jwtData.setLastLogin(null);
+            jwtData.setTokenExpiry(null); // or handle default value
+        }
         return jwtData;
 
     }

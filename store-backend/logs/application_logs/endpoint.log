@@ -1,0 +1,24 @@
+2024-10-28 22:41:34 [main] INFO  c.e.s.s.ECommerceStoreBackendApplication - Starting ECommerceStoreBackendApplication using Java 22 with PID 15802 (/home/ehtisham/Zip FIles/Projects/E-Commerce/store-backend/target/classes started by ehtisham in /home/ehtisham/Zip FIles/Projects/E-Commerce/store-backend)
+2024-10-28 22:41:34 [main] INFO  c.e.s.s.ECommerceStoreBackendApplication - No active profile set, falling back to 1 default profile: "default"
+2024-10-28 22:41:38 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-10-28 22:41:38 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-10-28 22:41:38 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-10-28 22:41:38 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-28 22:41:38 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-10-28 22:41:38 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4009 ms
+2024-10-28 22:41:39 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-10-28 22:41:40 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-10-28 22:41:40 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-10-28 22:41:40 [main] INFO  c.e.s.s.ECommerceStoreBackendApplication - Started ECommerceStoreBackendApplication in 8.534 seconds (process running for 11.132)
+2024-10-28 22:41:47 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-28 22:41:47 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-10-28 22:41:47 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2024-10-28 22:41:49 [http-nio-8080-exec-6] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 1192 ms
+2024-10-28 22:42:28 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-10-28 22:42:39 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2d39ef2d
+2024-10-28 22:42:39 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-10-28 22:42:45 [http-nio-8080-exec-7] INFO  c.e.s.s.R.Auth.UserRepositoryImpl - Loaded user details for email: issaehtishamali@gmail.com
+2024-10-28 22:43:15 [http-nio-8080-exec-7] INFO  c.e.s.s.R.Auth.UserRepositoryImpl - Roles retrieved for userId: 0
+2024-10-28 22:43:49 [http-nio-8080-exec-7] INFO  c.e.s.s.R.Auth.UserRepositoryImpl - Retrieved JWT data for email: issaehtishamali@gmail.com
+2024-10-28 22:44:27 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-10-28 22:44:30 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
